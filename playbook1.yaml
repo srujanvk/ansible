@@ -1,0 +1,25 @@
+---
+- name: Configure Nginx web server
+  hosts: aws
+  become: yes
+  tasks:
+  - name: yum update
+    yum:
+      update_cache: yes
+  - name: repo update and enable
+    command: sudo amazon-linux-extras enable nginx1
+  - name: Install nginx server
+    yum:
+      name: nginx
+      state: absent
+        #enablerepo: amazon-linux-extras
+  - name: start nginx server
+    service:
+      name: nginx
+      state: stopped
+      enabled: yes
+  - name: Install python
+    yum:
+      name: python
+      state: present
+    when: ansible_python is not defined
